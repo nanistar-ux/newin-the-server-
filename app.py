@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, flash
 import requests
+import os  # <-- Add this import
 
 # -----------------------------
 # Flask app (frontend)
@@ -22,6 +23,7 @@ def index():
             flash("No file uploaded", "error")
             return render_template("index.html", result=result)
 
+        # Check file size
         file.seek(0, 2)
         size = file.tell()
         file.seek(0)
@@ -46,14 +48,13 @@ def index():
                 map_response = requests.post(
                     WEBGIS_API_URL,
                     headers={"x-api-key": WEBGIS_API_KEY, "Content-Type": "application/json"},
-                    json=result.get("result"),  # Send only the 'result' from model
+                    json=result.get("result"),
                     timeout=30
                 )
                 if map_response.status_code != 200:
                     flash(f"Map API request failed: {map_response.text}", "error")
                 else:
                     print("Map API response:", map_response.json())
-
             except Exception as e:
                 flash(f"Failed to send to Map API: {str(e)}", "error")
 
@@ -69,5 +70,7 @@ def index():
 # Run Flask frontend
 # -----------------------------
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 8080))
+    port = int(os.getenv("PORT", 8080))  # Render sets this automatically
     app.run(host="0.0.0.0", port=port, debug=True)
+
+
