@@ -59,7 +59,7 @@ def index():
                 flash(f"Failed to send to Map API: {str(e)}", "error")
 
             # Step 3: Redirect to Map UI
-            return redirect("http://10.80.200.111:5001/")
+            return redirect("http://10.212.239.250:5001/")
 
         except requests.exceptions.RequestException as e:
             flash(f"Failed to connect to Model API: {str(e)}", "error")
@@ -72,5 +72,6 @@ def index():
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8080))  # Render sets this automatically
     app.run(host="0.0.0.0", port=port, debug=True)
+
 
 
